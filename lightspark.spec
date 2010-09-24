@@ -22,7 +22,7 @@
 %define major 0.4.4
 
 Name:           lightspark
-Version:        %{major}.2
+Version:        %{major}.3
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -59,11 +59,9 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  boost-devel
 BuildRequires:  gettext
-BuildRequires:  git
+BuildRequires:  libxml++-devel
 
 Requires:       hicolor-icon-theme
-
-Patch0:         0001-Add-desktop-file-and-sized-icons.patch
 
 %description
 Lightspark is a modern, free, open-source flash player implementation.
@@ -79,6 +77,7 @@ documentation was released.
 %package mozilla-plugin
 Summary:       Mozilla compatible plugin for %{name}
 Requires:      mozilla-filesystem
+Requires:      %{name} = %{version}-%{release}
 
 %description mozilla-plugin
 This is the Mozilla compatible plugin for %{name}. It can fallback to
@@ -87,7 +86,6 @@ install gnash ( without gnash-plugin ).
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:%{pre}}
-git apply %{PATCH0}
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -98,6 +96,7 @@ git apply %{PATCH0}
 %else
        -DCMAKE_BUILD_TYPE=Release \
 %endif
+       -DAUDIO_BACKEND=pulse \
        .
 make VERBOSE=1 %{?_smp_mflags}
 
@@ -153,6 +152,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Fri Sep 24 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-1
+- New bugfix release
+
 * Thu Sep 12 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.2-1
 - New bugfix release
 
