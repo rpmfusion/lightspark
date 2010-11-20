@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 3
+%define rel 4
 
 %define major 0.4.4
 
@@ -157,7 +157,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
-* Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-3
+* Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-4
 - Avoid creating executable stack, fixes : 
   https://bugs.launchpad.net/lightspark/+bug/668677
 
