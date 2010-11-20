@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 2
+%define rel 3
 
 %define major 0.4.4
 
@@ -63,6 +63,10 @@ BuildRequires:  libxml++-devel
 
 Requires:       hicolor-icon-theme
 
+# Patch0:       Do not create executable stack
+#               https://bugs.launchpad.net/lightspark/+bug/668677
+Patch0:         %{name}-%{version}-noexecstack.patch
+
 %description
 Lightspark is a modern, free, open-source flash player implementation.
 Lightspark features:
@@ -86,6 +90,7 @@ install gnash ( without gnash-plugin ).
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:%{pre}}
+%patch0 -p1 -b .noexecstack
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -152,6 +157,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-3
+- Avoid creating executable stack, fixes : 
+  https://bugs.launchpad.net/lightspark/+bug/668677
+
 * Thu Oct 14 2010 Nicolas Chauvet <kwizart@gmail.com> - 0.4.4.3-2
 - Rebuilt for gcc bug
 
