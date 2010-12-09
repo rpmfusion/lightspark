@@ -17,12 +17,12 @@
 %define pre rc1
 %endif 
 
-%define rel 3
+%define rel 1
 
-%define major 0.4.4
+%define major 0.4.5
 
 Name:           lightspark
-Version:        %{major}.3
+Version:        %{major}
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -39,7 +39,7 @@ URL:            http://lightspark.sourceforge.net
 # tar cjf %%{name}-%%{version}-%%{date}git.tar.bz2 %%{name}-%%{version}       
 Source0:        %{name}-%{version}-%{date}git.tar.bz2
 %else
-Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{major}/+download/%{name}-%{version}%{?pre:%{pre}}.tar.gz
+Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{major}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -63,10 +63,6 @@ BuildRequires:  libxml++-devel
 
 Requires:       hicolor-icon-theme
 
-# Patch0:       Do not create executable stack
-#               https://bugs.launchpad.net/lightspark/+bug/668677
-Patch0:         %{name}-%{version}-noexecstack.patch
-
 %description
 Lightspark is a modern, free, open-source flash player implementation.
 Lightspark features:
@@ -89,8 +85,7 @@ gnash for unsupported swf files ( AS2/avm1 ); to enable this feature
 install gnash ( without gnash-plugin ).
 
 %prep
-%setup -q -n %{name}-%{version}%{?pre:%{pre}}
-%patch0 -p1 -b .noexecstack
+%setup -q -n %{name}-%{version}%{?pre:~%{pre}}
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -142,6 +137,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING COPYING.LESSER ChangeLog
+%config(noreplace) %{_sysconfdir}/xdg/lightspark.conf
 %{_bindir}/%{name}
 %{_bindir}/tightspark
 %{_datadir}/%{name}
@@ -157,7 +153,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
-* Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-3
+* Wed Dec 08 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5-1
+- Update to 0.4.5 final
+
+* Thu Nov 25 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5-0.1.rc1
+- Release candidate for the upcoming version
+- Drop noexecstack patch ( merged upstream )
+
+* Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-4
 - Avoid creating executable stack, fixes : 
   https://bugs.launchpad.net/lightspark/+bug/668677
 
