@@ -6,7 +6,7 @@
 %define git_snapshot 1
 %endif
 
-%define pre_release 1
+%define pre_release 0
 
 %if %{?git}
 %define commit 2530e6cd11d5d3fc9cbd92f2adf503cfafcc2692
@@ -153,6 +153,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Wed Dec 08 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5-1
+- Update to 0.4.5 final
+
 * Thu Nov 25 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5-0.1.rc1
 - Release candidate for the upcoming version
 - Drop noexecstack patch ( merged upstream )
