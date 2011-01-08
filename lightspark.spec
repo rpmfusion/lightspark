@@ -1,6 +1,6 @@
 %define debug 0
 
-%define git 0
+%define git 1
 
 %if %{git}
 %define git_snapshot 1
@@ -9,15 +9,15 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 2530e6cd11d5d3fc9cbd92f2adf503cfafcc2692
-%define date 20100825
+%define commit c9fbbca66ce214e8df2d59aae90af6427af5057f
+%define date 20110108
 %endif
 
 %if %{pre_release}
 %define pre rc1
 %endif 
 
-%define rel 1
+%define rel 2
 
 %define major 0.4.5
 
@@ -59,7 +59,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  boost-devel
 BuildRequires:  gettext
-BuildRequires:  libxml++-devel
+BuildRequires:  libxml++-devel >= 2.33.1
 
 Requires:       hicolor-icon-theme
 
@@ -151,8 +151,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %defattr(-,root,root,-)
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
-
 %changelog
+* Fri Jan 08 2011 Hicham HAOAURI <hicham.haouari@gmail.com> - 0.4.5.1-2.20110108git
+- Today's snapshot, with gradients support
+
 * Thu Dec 16 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.1-1
 - New bugfix release
 
