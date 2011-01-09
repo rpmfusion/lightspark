@@ -9,15 +9,15 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit c9fbbca66ce214e8df2d59aae90af6427af5057f
-%define date 20110108
+%define commit 7109082a509416b65cc4b8180686a97c72042882
+%define date 20110109
 %endif
 
 %if %{pre_release}
 %define pre rc1
 %endif 
 
-%define rel 2
+%define rel 3
 
 %define major 0.4.5
 
@@ -152,7 +152,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
-* Fri Jan 08 2011 Hicham HAOAURI <hicham.haouari@gmail.com> - 0.4.5.1-2.20110108git
+* Sun Jan 09 2011 Hicham HAOAURI <hicham.haouari@gmail.com> - 0.4.5.1-3.20110109git
+- Today's snapshot, fixes a crash on some websites
+
+* Sat Jan 08 2011 Hicham HAOAURI <hicham.haouari@gmail.com> - 0.4.5.1-2.20110108git
 - Today's snapshot, with gradients support
 
 * Thu Dec 16 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.1-1
