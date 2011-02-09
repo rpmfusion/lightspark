@@ -9,20 +9,20 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 7109082a509416b65cc4b8180686a97c72042882
-%define date 20110109
+%define commit 422062865cd0f875f74744703fa8438a04f0ebe9
+%define date 20110209
 %endif
 
 %if %{pre_release}
 %define pre rc1
 %endif 
 
-%define rel 3
+%define rel 1
 
 %define major 0.4.5
 
 Name:           lightspark
-Version:        %{major}.1
+Version:        %{major}.2
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -60,6 +60,7 @@ BuildRequires:  libcurl-devel
 BuildRequires:  boost-devel
 BuildRequires:  gettext
 BuildRequires:  libxml++-devel >= 2.33.1
+BuildRequires:  librtmp-devel
 
 Requires:       hicolor-icon-theme
 
@@ -152,7 +153,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
-* Sun Jan 09 2011 Hicham HAOAURI <hicham.haouari@gmail.com> - 0.4.5.1-3.20110109git
+* Sat Feb 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.2-1.20110209git
+- Today's snapshot, fixes a youtube crasher
+
+* Sun Jan 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.1-3.20110109git
 - Today's snapshot, fixes a crash on some websites
 
 * Sat Jan 08 2011 Hicham HAOAURI <hicham.haouari@gmail.com> - 0.4.5.1-2.20110108git
