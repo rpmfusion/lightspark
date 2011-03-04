@@ -9,8 +9,8 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 422062865cd0f875f74744703fa8438a04f0ebe9
-%define date 20110209
+%define commit b2eafece0d7c5c93b1c0837ed8d56d9b7e3ce022
+%define date 20110304
 %endif
 
 %if %{pre_release}
@@ -22,7 +22,7 @@
 %define major 0.4.5
 
 Name:           lightspark
-Version:        %{major}.2
+Version:        %{major}.3
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -150,9 +150,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files mozilla-plugin
 %defattr(-,root,root,-)
+%doc COPYING COPYING.LESSER
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Fri Mar 04 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.3-1.20110304git
+- Update to 0.4.5.3
+
 * Sat Feb 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.2-1.20110209git
 - Today's snapshot, fixes a youtube crasher
 
