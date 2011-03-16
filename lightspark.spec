@@ -1,6 +1,6 @@
 %define debug 0
 
-%define git 1
+%define git 0
 
 %if %{git}
 %define git_snapshot 1
@@ -17,12 +17,12 @@
 %define pre rc1
 %endif 
 
-%define rel 0.1
+%define rel 1
 
 %define major 0.4.6
 
 Name:           lightspark
-Version:        %{major}.0
+Version:        %{major}
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Wed Mar 16 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.6-1
+- Update to 0.4.6 final
+
 * Sun Mar 13 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.6.0-0.1.20110313git
 - New snapshot, fixes buttons display on youtube
 
