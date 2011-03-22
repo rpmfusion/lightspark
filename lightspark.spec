@@ -22,7 +22,7 @@
 %define major 0.4.6
 
 Name:           lightspark
-Version:        %{major}
+Version:        %{major}.1
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Mar 22 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.6.1-1
+- Update to 0.4.6.1
+
 * Wed Mar 16 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.6-1
 - Update to 0.4.6 final
 
