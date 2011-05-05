@@ -9,8 +9,8 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 88014f93f65b4079d75ea6c7d07ff156c2c5c8dd
-%define date 20110313
+%define commit e3d91fb7d87272565a8380894e48f467008587ad
+%define date 20110429
 %endif
 
 %if %{pre_release}
@@ -19,7 +19,7 @@
 
 %define rel 1
 
-%define major 0.4.6
+%define major 0.4.7
 
 Name:           lightspark
 Version:        %{major}.1
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Thu May 05 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.7.1-1
+- Update to 0.4.7.1
+
 * Tue Mar 22 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.6.1-1
 - Update to 0.4.6.1
 
