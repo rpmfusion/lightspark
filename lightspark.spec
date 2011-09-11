@@ -9,8 +9,8 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit e3d91fb7d87272565a8380894e48f467008587ad
-%define date 20110429
+%define commit 13e17fbc018022340ddeec44c6f5d464674ec728
+%define date 20110610
 %endif
 
 %if %{pre_release}
@@ -19,10 +19,10 @@
 
 %define rel 1
 
-%define major 0.4.7
+%define major 0.5.0
 
 Name:           lightspark
-Version:        %{major}.1
+Version:        %{major}
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -46,13 +46,11 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
 BuildRequires:  glew-devel >= 1.5.4
-BuildRequires:  ftgl-devel
 BuildRequires:  ffmpeg-devel
 BuildRequires:  nasm
 BuildRequires:  SDL-devel
 BuildRequires:  gtkglext-devel
 BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  fontconfig-devel
 BuildRequires:  pcre-devel
 BuildRequires:  xulrunner-devel >= 1.9.2
 BuildRequires:  desktop-file-utils
@@ -62,16 +60,14 @@ BuildRequires:  gettext
 BuildRequires:  libxml++-devel >= 2.33.1
 BuildRequires:  librtmp-devel
 
-Requires:       hicolor-icon-theme
-
 %description
 Lightspark is a modern, free, open-source flash player implementation.
 Lightspark features:
 
-* JIT compilation of Actionscript to native x86 bytecode using LLVM
+* JIT compilation of Actionscript to native x86 byte code using LLVM
 * Hardware accelerated rendering using OpenGL Shaders (GLSL)
 * Very good and robust support for current-generation Actionscript 3
-* A new, clean, codebase exploiting multithreading and optimized for 
+* A new, clean, code base exploiting Multi-Threading and optimized for 
 modern hardware. Designed from scratch after the official Flash 
 documentation was released.
 
@@ -82,7 +78,7 @@ Requires:      %{name} = %{version}-%{release}
 
 %description mozilla-plugin
 This is the Mozilla compatible plugin for %{name}. It can fallback to
-gnash for unsupported swf files ( AS2/avm1 ); to enable this feature
+gnash for unsupported SWF files ( AS2/avm1 ); to enable this feature
 install gnash ( without gnash-plugin ).
 
 %prep
@@ -99,6 +95,7 @@ install gnash ( without gnash-plugin ).
 %endif
        -DAUDIO_BACKEND=pulse \
        .
+
 make VERBOSE=1 %{?_smp_mflags}
 
 
@@ -154,6 +151,17 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sun Sep 11 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.0-1
+- Update to 0.5.0 final
+
+* Sat Jul 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.0-0.1.rc1
+- Update to 0.5.0 rc1
+- Removed fontconfig-devel and ftgl-devel from BR
+- Removed hicolor-icon-theme from Requires ( automatically pulled by gtk )
+
+* Fri May 27 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.8.1-1
+- Update 0.4.8.1
+
 * Thu May 05 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.7.1-1
 - Update to 0.4.7.1
 
