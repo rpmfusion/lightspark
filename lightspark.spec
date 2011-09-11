@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 1
+%define rel 2
 
 %define major 0.5.0
 
@@ -59,6 +59,7 @@ BuildRequires:  boost-devel
 BuildRequires:  gettext
 BuildRequires:  libxml++-devel >= 2.33.1
 BuildRequires:  librtmp-devel
+BuildRequires:  libffi-devel
 
 %description
 Lightspark is a modern, free, open-source flash player implementation.
@@ -151,6 +152,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sun Sep 11 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.0-2
+- BR libffi-devel
+
 * Sun Sep 11 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.0-1
 - Update to 0.5.0 final
 
