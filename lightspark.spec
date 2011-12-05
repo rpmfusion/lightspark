@@ -19,7 +19,7 @@
 
 %define rel 1
 
-%define major 0.5.0
+%define major 0.5.3
 
 Name:           lightspark
 Version:        %{major}
@@ -39,9 +39,10 @@ URL:            http://lightspark.sourceforge.net
 # tar cjf %%{name}-%%{version}-%%{date}git.tar.bz2 %%{name}-%%{version}       
 Source0:        %{name}-%{version}-%{date}git.tar.bz2
 %else
-Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{major}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
+Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Patch0:         %{name}-%{version}-remove-llvm-version-check.patch
 
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
@@ -59,6 +60,7 @@ BuildRequires:  boost-devel
 BuildRequires:  gettext
 BuildRequires:  libxml++-devel >= 2.33.1
 BuildRequires:  librtmp-devel
+BuildRequires:  libffi-devel
 
 %description
 Lightspark is a modern, free, open-source flash player implementation.
@@ -83,6 +85,7 @@ install gnash ( without gnash-plugin ).
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:~%{pre}}
+%patch0 -p1 -b .remove-llvm-version-check
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -151,6 +154,15 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Mon Dec 05 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.3-1
+- Update to 0.5.3
+
+* Tue Nov 15 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.2.1-1
+- Update to upstream 0.5.2.1 release
+
+* Sun Sep 11 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.0-2
+- BR libffi-devel
+
 * Sun Sep 11 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.0-1
 - Update to 0.5.0 final
 
