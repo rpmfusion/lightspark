@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 1
+%define rel 2
 
 %define major 0.5.3
 
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Wed Jan 25 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.5.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Mon Dec 05 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.3-1
 - Update to 0.5.3
 
