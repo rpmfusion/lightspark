@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 2
+%define rel 3
 
 %define major 0.5.4
 
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Fri Mar 02 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.5.4.1-3
+- Rebuilt for c++ ABI breakage
+
 * Tue Feb 28 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.5.4.1-2
 - Rebuilt for x264/FFmpeg
 
