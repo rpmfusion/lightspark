@@ -17,12 +17,12 @@
 %define pre rc1
 %endif 
 
-%define rel 3
+%define rel 1
 
-%define major 0.5.4
+%define major 0.5.5
 
 Name:           lightspark
-Version:        %{major}.1
+Version:        %{major}
 Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
@@ -154,11 +154,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
-* Fri Mar 02 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.5.4.1-3
-- Rebuilt for c++ ABI breakage
-
-* Tue Feb 28 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.5.4.1-2
-- Rebuilt for x264/FFmpeg
+* Mon Mar 12 2012 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.5-1
+- Update to 0.5.5
 
 * Fri Feb 10 2012 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.4.1-1
 - Update to 0.5.4.1
