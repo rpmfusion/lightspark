@@ -17,9 +17,9 @@
 %define pre rc1
 %endif 
 
-%define rel 2
+%define rel 1
 
-%define major 0.5.5
+%define major 0.5.7
 
 Name:           lightspark
 Version:        %{major}
@@ -42,7 +42,7 @@ Source0:        %{name}-%{version}-%{date}git.tar.bz2
 Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
 %endif
 
-Patch0:         %{name}-%{version}-remove-llvm-version-check.patch
+Patch0:         %{name}-0.5.5-remove-llvm-version-check.patch
 
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Mon May 21 2012 Xavier Bachelot <xavier@bachelot.org> - 0.5.7-1
+- Update to 0.5.7.
+
 * Mon Mar 12 2012 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.5.5-2
 - Release bump
 
