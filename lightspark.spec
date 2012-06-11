@@ -19,7 +19,7 @@
 
 %define rel 1
 
-%define major 0.5.7
+%define major 0.6.0.1
 
 Name:           lightspark
 Version:        %{major}
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Mon Jun 11 2012 Xavier Bachelot <xavier@bachelot.org> - 0.6.0.1-1
+- Update to 0.6.0.1.
+
 * Mon May 21 2012 Xavier Bachelot <xavier@bachelot.org> - 0.5.7-1
 - Update to 0.5.7.
 
