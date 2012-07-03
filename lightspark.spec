@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 1
+%define rel 2
 
 %define major 0.6.0
 
@@ -154,6 +154,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Jul 03 2012 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.6.0.1-2
+- Rebuild
+
 * Tue Jul 03 2012 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.6.0.1-1
 - Update to 0.6.0.1
 
