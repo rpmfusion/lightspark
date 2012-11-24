@@ -17,13 +17,13 @@
 %define pre rc1
 %endif 
 
-%define rel 3
+%define rel 1
 
-%define major 0.6.0
+%define major 0.7.0
 
 Name:           lightspark
-Version:        %{major}.1
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Version:        %{major}
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -61,6 +61,7 @@ BuildRequires:  gettext
 BuildRequires:  libxml++-devel >= 2.33.1
 BuildRequires:  librtmp-devel
 BuildRequires:  libffi-devel
+BuildRequires:  xz-devel
 
 %description
 Lightspark is a modern, free, open-source flash player implementation.
@@ -154,6 +155,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sat Nov 24 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.7.0-1.1
+- Rebuilt for FFmpeg 1.0
+
+* Sun Oct 28 2012 Xavier Bachelot <xavier@bachelot.org> - 0.7.0-1
+- Update to 0.7.0.
+
 * Wed Oct 17 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.6.0.1-3
 - Rebuilt for boost GLEW
 
