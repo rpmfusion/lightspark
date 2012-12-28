@@ -19,11 +19,11 @@
 
 %define rel 1
 
-%define major 0.7.0
+%define major 0.7.1
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -155,6 +155,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Fri Dec 28 2012 Xavier Bachelot <xavier@bachelot.org> - 0.7.1-1
+- Update to 0.7.1.
+
 * Sat Nov 24 2012 Nicolas Chauvet <kwizart@gmail.com> - 0.7.0-1.1
 - Rebuilt for FFmpeg 1.0
 
