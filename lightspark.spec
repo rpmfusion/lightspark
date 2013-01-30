@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 1
+%define rel 2
 
 %define major 0.7.1
 
@@ -155,6 +155,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Wed Jan 30 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.1-2
+- Rebuilt for ffmpeg
+
 * Fri Dec 28 2012 Xavier Bachelot <xavier@bachelot.org> - 0.7.1-1
 - Update to 0.7.1.
 
