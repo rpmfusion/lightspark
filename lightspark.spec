@@ -23,7 +23,7 @@
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -155,6 +155,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sun Apr 28 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.1-2.1
+- https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Wed Jan 30 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.1-2
 - Rebuilt for ffmpeg
 
