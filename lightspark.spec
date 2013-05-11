@@ -17,13 +17,13 @@
 %define pre rc1
 %endif 
 
-%define rel 2
+%define rel 1
 
-%define major 0.7.1
+%define major 0.7.2
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -43,6 +43,8 @@ Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/
 %endif
 
 Patch0:         %{name}-0.5.5-remove-llvm-version-check.patch
+Patch1:         lightspark-0.7.2-llvm33.patch
+Patch2:         lightspark-0.7.2-llvm-libs-hack.patch
 
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
@@ -87,6 +89,8 @@ install gnash ( without gnash-plugin ).
 %prep
 %setup -q -n %{name}-%{version}%{?pre:~%{pre}}
 %patch0 -p1 -b .remove-llvm-version-check
+%patch1 -p1 -b .llvm33
+%patch2 -p1 -b .llvm-libs-hack
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -155,6 +159,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sat May 11 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 0.7.2-1
+- New upstream release 0.7.2
+- Fix building with llvm-3.3
+- Rebuild for new boost libs
+
 * Sun Apr 28 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.1-2.1
 - https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
@@ -226,7 +235,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Fri Mar 04 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.3-1.20110304git
 - Update to 0.4.5.3
 
-* Sat Feb 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.2-1.20110209git
+* Wed Feb 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.2-1.20110209git
 - Today's snapshot, fixes a youtube crasher
 
 * Sun Jan 09 2011 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.5.1-3.20110109git
@@ -255,7 +264,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Fri Sep 24 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-1
 - New bugfix release
 
-* Thu Sep 12 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.2-1
+* Sun Sep 12 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.2-1
 - New bugfix release
 
 * Thu Sep 02 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.1-1
@@ -276,13 +285,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Tue Jul 27 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2.2-1
 - Add gnash fallback
 
-* Tue Jul 24 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2.1-1
+* Sat Jul 24 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2.1-1
 - New bugfix release
 
 * Tue Jul 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-1
 - 0.4.2 release
 
-* Sun Jul 19 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-0.4.20100719git.rc2
+* Mon Jul 19 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-0.4.20100719git.rc2
 - Fix sound synchronization
 
 * Sun Jul 04 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-0.3.20100707git.rc2
@@ -291,5 +300,5 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Sun Jul 04 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-0.2.rc2
 - New release candidate
 
-* Thu Jun 23 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-0.1.rc1
+* Wed Jun 23 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.2-0.1.rc1
 - Initial package for fedora
