@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 1
+%define rel 2
 
 %define major 0.7.2
 
@@ -159,6 +159,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sun May 26 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-2
+- Rebuilt for x264/FFmpeg
+
 * Sat May 11 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 0.7.2-1
 - New upstream release 0.7.2
 - Fix building with llvm-3.3
