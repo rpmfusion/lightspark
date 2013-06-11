@@ -23,7 +23,7 @@
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -159,6 +159,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Jun 11 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-2.1
+- Rebuilt for LLVM soname fix
+
 * Sun May 26 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-2
 - Rebuilt for x264/FFmpeg
 
