@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 2
+%define rel 3
 
 %define major 0.7.2
 
@@ -159,6 +159,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Thu Aug 15 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-3.1
+- Rebuilt for FFmpeg 2.0.x
+
 * Tue Jun 11 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-2.1
 - Rebuilt for LLVM soname fix
 
