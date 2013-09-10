@@ -1,6 +1,6 @@
 %define debug 0
 
-%define git 0
+%define git 1
 
 %if %{git}
 %define git_snapshot 1
@@ -9,21 +9,21 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 13e17fbc018022340ddeec44c6f5d464674ec728
-%define date 20110610
+%define commit 50819e3ab957af9a39e04655b28ea98267448232
+%define date 20130827
 %endif
 
 %if %{pre_release}
 %define pre rc1
 %endif 
 
-%define rel 3
+%define rel 4
 
 %define major 0.7.2
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -42,8 +42,6 @@ Source0:        %{name}-%{version}-%{date}git.tar.bz2
 Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
 %endif
 
-Patch0:         %{name}-0.5.5-remove-llvm-version-check.patch
-Patch1:         lightspark-0.7.2-llvm33.patch
 Patch2:         lightspark-0.7.2-llvm-libs-hack.patch
 
 BuildRequires:  cmake
@@ -88,8 +86,6 @@ install gnash ( without gnash-plugin ).
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:~%{pre}}
-%patch0 -p1 -b .remove-llvm-version-check
-%patch1 -p1 -b .llvm33
 %patch2 -p1 -b .llvm-libs-hack
 
 %build
@@ -159,6 +155,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Aug 27 2013 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-4.20130827git
+- Update to git snapshot.
+- Drop obsolete patches.
+
 * Thu Aug 15 2013 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-3.1
 - Rebuilt for FFmpeg 2.0.x
 
