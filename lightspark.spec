@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 4
+%define rel 5
 
 %define major 0.7.2
 
@@ -155,6 +155,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Nov 05 2013 Xavier Bachelot <xavier@bachelot.org> 0.7.2-5..20130827git
+- Rebuild for ffmpeg 2.1.
+
 * Tue Aug 27 2013 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-4.20130827git
 - Update to git snapshot.
 - Drop obsolete patches.
