@@ -9,15 +9,15 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 50819e3ab957af9a39e04655b28ea98267448232
-%define date 20130827
+%define commit c974834f93d93bc0f2713a75da62025984cb02f3
+%define date 20140219
 %endif
 
 %if %{pre_release}
 %define pre rc1
 %endif 
 
-%define rel 6
+%define rel 7
 
 %define major 0.7.2
 
@@ -43,6 +43,7 @@ Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/
 %endif
 
 Patch2:         lightspark-0.7.2-llvm-libs-hack.patch
+Patch3:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
 
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
@@ -87,6 +88,7 @@ install gnash ( without gnash-plugin ).
 %prep
 %setup -q -n %{name}-%{version}%{?pre:~%{pre}}
 %patch2 -p1 -b .llvm-libs-hack
+%patch3 -p1 -b .ffmpeg-include-dir
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -155,10 +157,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Mar 11 2014 Xavier Bachelot <xavier@bachelot.org> 0.7.2-7.20140219git
+- New snapshot with LLVM 3.4 support.
+- Add patch to properly set FFmpeg include directory.
+
 * Tue Jan 07 2014 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-6.20130827git
 - Rebuilt for librtmp
 
-* Tue Nov 05 2013 Xavier Bachelot <xavier@bachelot.org> 0.7.2-5..20130827git
+* Tue Nov 05 2013 Xavier Bachelot <xavier@bachelot.org> 0.7.2-5.20130827git
 - Rebuild for ffmpeg 2.1.
 
 * Tue Aug 27 2013 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-4.20130827git
