@@ -17,7 +17,7 @@
 %define pre rc1
 %endif 
 
-%define rel 7
+%define rel 8
 
 %define major 0.7.2
 
@@ -157,6 +157,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Tue Mar 25 2014 Xavier Bachelot <xavier@bachelot.org> 0.7.2-8.20130827git
+- Rebuild for ffmpeg 2.2.
+
 * Tue Mar 11 2014 Xavier Bachelot <xavier@bachelot.org> 0.7.2-7.20140219git
 - New snapshot with LLVM 3.4 support.
 - Add patch to properly set FFmpeg include directory.
