@@ -17,13 +17,13 @@
 %define pre rc1
 %endif 
 
-%define rel 8
+%define rel 9
 
 %define major 0.7.2
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -157,7 +157,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
-* Sun Aug 03 2014 Sérgio Basto <sergio@serjux.com> - 0.7.2-8.20140219git.1
+* Sun Aug 03 2014 Sérgio Basto <sergio@serjux.com> - 0.7.2-9.20140219git
 - Rebuilt for boost-1.55
 
 * Tue Mar 25 2014 Xavier Bachelot <xavier@bachelot.org> 0.7.2-8.20130827git
