@@ -9,8 +9,8 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit c974834f93d93bc0f2713a75da62025984cb02f3
-%define date 20140219
+%define commit e218da67b9650ac33666612b2c32377568957f66
+%define date 20160703
 %endif
 
 %if %{pre_release}
@@ -23,7 +23,7 @@
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.2
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.3
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -37,13 +37,12 @@ URL:            http://lightspark.sourceforge.net
 # rm -rf .git && cd ..
 # mv %%{name} %%{name}-%%{version}
 # tar cjf %%{name}-%%{version}-%%{date}git.tar.bz2 %%{name}-%%{version}       
-Source0:        %{name}-%{version}-%{date}git.tar.bz2
+Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git.tar.gz
 %else
 Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
 %endif
 
-Patch2:         lightspark-0.7.2-llvm-libs-hack.patch
-Patch3:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
+Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
 
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
@@ -86,9 +85,8 @@ gnash for unsupported SWF files ( AS2/avm1 ); to enable this feature
 install gnash ( without gnash-plugin ).
 
 %prep
-%setup -q -n %{name}-%{version}%{?pre:~%{pre}}
-%patch2 -p1 -b .llvm-libs-hack
-%patch3 -p1 -b .ffmpeg-include-dir
+%setup -q -n %{name}-%{commit}
+%patch0 -p1 -b .ffmpeg-include-dir
 
 %build
 %cmake -DCOMPILE_PLUGIN=1  \
@@ -125,18 +123,18 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 rm -rf $RPM_BUILD_ROOT
 
 %post
-update-desktop-database &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/update-desktop-database &> /dev/null || :
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
 %postun
-update-desktop-database &> /dev/null || :
+/usr/bin/update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
 
 %posttrans
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
@@ -144,12 +142,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %config(noreplace) %{_sysconfdir}/xdg/lightspark.conf
 %{_bindir}/%{name}
 %{_bindir}/tightspark
-%{_datadir}/%{name}
+%{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
-%{_datadir}/man/man1/%{name}.1.gz
-%{_datadir}/man/man1/tightspark.1.gz
-%{_libdir}/%{name}
+%{_datadir}/man/man1/%{name}.1.*
+%{_datadir}/man/man1/tightspark.1.*
+%{_libdir}/%{name}/
 
 %files mozilla-plugin
 %defattr(-,root,root,-)
@@ -157,6 +155,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sat Jul 09 2016 Leigh Scott <leigh123linux@googlemail.com> - 0.7.2-10.20160703git.3
+- Update to latest git
+
 * Mon Oct 20 2014 Sérgio Basto <sergio@serjux.com> - 0.7.2-10.20140219git.2
 - Rebuilt for FFmpeg 2.4.3
 
