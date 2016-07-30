@@ -23,7 +23,7 @@
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.3
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.4
 Summary:        An alternative Flash Player implementation
 
 Group:          Applications/Multimedia
@@ -155,6 +155,9 @@ fi
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
 %changelog
+* Sat Jul 30 2016 Julian Sikorski <belegdol@fedoraproject.org> - 0.7.2-10.20160703git.4
+- Rebuilt for ffmpeg-3.1.1
+
 * Sat Jul 09 2016 Leigh Scott <leigh123linux@googlemail.com> - 0.7.2-10.20160703git.3
 - Update to latest git
 
