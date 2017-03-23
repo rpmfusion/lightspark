@@ -9,34 +9,25 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit e218da67b9650ac33666612b2c32377568957f66
-%define date 20160703
+%define commit 308241eb55c5379765033e60f28dfdd956c7abcd
+%define date 20170107
 %endif
 
 %if %{pre_release}
 %define pre rc1
-%endif 
+%endif
 
-%define rel 10
+%define rel 11
 
 %define major 0.7.2
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.5
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
-
-Group:          Applications/Multimedia
 License:        LGPLv3+
 URL:            http://lightspark.sourceforge.net
 %if %{git}
-# This is a git snapshot, to get it, follow this steps :
-# git clone git://github.com/lightspark/lightspark.git
-# cd %%{name}
-# git checkout %%{commit} *
-# rm -rf .git && cd ..
-# mv %%{name} %%{name}-%%{version}
-# tar cjf %%{name}-%%{version}-%%{date}git.tar.bz2 %%{name}-%%{version}       
 Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git.tar.gz
 %else
 Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
@@ -49,7 +40,8 @@ BuildRequires:  llvm-devel >= 2.7
 BuildRequires:  glew-devel >= 1.5.4
 BuildRequires:  ffmpeg-devel
 BuildRequires:  nasm
-BuildRequires:  SDL-devel
+BuildRequires:  SDL2-devel
+BuildRequires:  SDL2_mixer-devel
 BuildRequires:  gtkglext-devel
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  pcre-devel
@@ -62,6 +54,8 @@ BuildRequires:  libxml++-devel >= 2.33.1
 BuildRequires:  librtmp-devel
 BuildRequires:  libffi-devel
 BuildRequires:  xz-devel
+BuildRequires:  ncurses-devel
+
 
 %description
 Lightspark is a modern, free, open-source flash player implementation.
@@ -70,9 +64,10 @@ Lightspark features:
 * JIT compilation of Actionscript to native x86 byte code using LLVM
 * Hardware accelerated rendering using OpenGL Shaders (GLSL)
 * Very good and robust support for current-generation Actionscript 3
-* A new, clean, code base exploiting Multi-Threading and optimized for 
-modern hardware. Designed from scratch after the official Flash 
+* A new, clean, code base exploiting Multi-Threading and optimized for
+modern hardware. Designed from scratch after the official Flash
 documentation was released.
+
 
 %package mozilla-plugin
 Summary:       Mozilla compatible plugin for %{name}
@@ -84,12 +79,14 @@ This is the Mozilla compatible plugin for %{name}. It can fallback to
 gnash for unsupported SWF files ( AS2/avm1 ); to enable this feature
 install gnash ( without gnash-plugin ).
 
+
 %prep
 %setup -q -n %{name}-%{commit}
 %patch0 -p1 -b .ffmpeg-include-dir
 
+
 %build
-%cmake -DCOMPILE_PLUGIN=1  \
+%cmake -DCOMPILE_PLUGIN=1 \
        -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
        -DENABLE_SOUND=1 \
 %if %{debug}
@@ -100,12 +97,11 @@ install gnash ( without gnash-plugin ).
        -DAUDIO_BACKEND=pulse \
        .
 
-make VERBOSE=1 %{?_smp_mflags}
+%make_build VERBOSE=1
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 %find_lang %{name}
 
 pushd $RPM_BUILD_ROOT%{_datadir}/man/man1
@@ -115,12 +111,8 @@ popd
 #remove devel file from package
 rm $RPM_BUILD_ROOT%{_libdir}/%{name}/lib%{name}.so
 
-install -Dpm 644 media/%{name}-logo.svg $RPM_BUILD_ROOT%{_datadir}/%{name}
-
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post
 /usr/bin/update-desktop-database &> /dev/null || :
@@ -136,13 +128,13 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
+
 %files -f %{name}.lang
-%defattr(-,root,root,-)
-%doc COPYING COPYING.LESSER ChangeLog
+%license COPYING COPYING.LESSER
+%doc ChangeLog
 %config(noreplace) %{_sysconfdir}/xdg/lightspark.conf
 %{_bindir}/%{name}
 %{_bindir}/tightspark
-%{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
 %{_datadir}/man/man1/%{name}.1.*
@@ -150,11 +142,15 @@ fi
 %{_libdir}/%{name}/
 
 %files mozilla-plugin
-%defattr(-,root,root,-)
-%doc COPYING COPYING.LESSER
+%license COPYING COPYING.LESSER
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
+
 %changelog
+* Thu Mar 23 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-11.20170107git
+- New snapshot.
+- Specfile cleanup.
+
 * Sun Mar 19 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 0.7.2-10.20160703git.5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
@@ -298,7 +294,7 @@ fi
 - Drop noexecstack patch ( merged upstream )
 
 * Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-4
-- Avoid creating executable stack, fixes : 
+- Avoid creating executable stack, fixes :
   https://bugs.launchpad.net/lightspark/+bug/668677
 
 * Thu Oct 14 2010 Nicolas Chauvet <kwizart@gmail.com> - 0.4.4.3-2
