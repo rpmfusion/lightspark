@@ -17,7 +17,7 @@
 %define pre rc1
 %endif
 
-%define rel 11
+%define rel 12
 
 %define major 0.7.2
 
@@ -34,6 +34,10 @@ Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/
 %endif
 
 Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
+
+# Build fails on ppc64 and ppc64le, temporarily disable them
+# https://github.com/lightspark/lightspark/issues/283
+ExcludeArch:    ppc64 ppc64le
 
 BuildRequires:  cmake
 BuildRequires:  llvm-devel >= 2.7
@@ -147,6 +151,9 @@ fi
 
 
 %changelog
+* Tue Apr 04 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-12.20170107git
+- Disable ppc64le and ppc64.
+
 * Thu Mar 23 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-11.20170107git
 - New snapshot.
 - Specfile cleanup.
