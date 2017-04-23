@@ -9,15 +9,15 @@
 %define pre_release 0
 
 %if %{?git}
-%define commit 308241eb55c5379765033e60f28dfdd956c7abcd
-%define date 20170107
+%define commit 7dd881170a1ed48596c19bac48cdcdd403f70841
+%define date 20170422
 %endif
 
 %if %{pre_release}
 %define pre rc1
 %endif
 
-%define rel 12
+%define rel 13
 
 %define major 0.7.2
 
@@ -151,6 +151,9 @@ fi
 
 
 %changelog
+* Sun Apr 23 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-13.20170422git
+- New snapshot with LLVM 4.0 support.
+
 * Tue Apr 04 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-12.20170107git
 - Disable ppc64le and ppc64.
 
