@@ -23,7 +23,7 @@
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.sourceforge.net
@@ -151,6 +151,9 @@ fi
 
 
 %changelog
+* Sat Apr 29 2017 Leigh Scott <leigh123linux@googlemail.com> - 0.7.2-13.20170422git.1
+- Rebuild for ffmpeg update
+
 * Sun Apr 23 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-13.20170422git
 - New snapshot with LLVM 4.0 support.
 
