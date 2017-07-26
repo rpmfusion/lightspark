@@ -1,6 +1,6 @@
 %define debug 0
 
-%define git 1
+%define git 0
 
 %if %{git}
 %define git_snapshot 1
@@ -17,20 +17,20 @@
 %define pre rc1
 %endif
 
-%define rel 13
+%define rel 1
 
-%define major 0.7.2
+%define major 0.8.0
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
-URL:            http://lightspark.sourceforge.net
+URL:            http://lightspark.github.io/
 %if %{git}
 Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git.tar.gz
 %else
-Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
+Source0:        https://github.com/lightspark/lightspark/archive/%{name}-%{version}.tar.gz
 %endif
 
 Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
@@ -39,26 +39,25 @@ Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
 # https://github.com/lightspark/lightspark/issues/283
 ExcludeArch:    ppc64 ppc64le
 
+BuildRequires:  boost-devel
 BuildRequires:  cmake
-BuildRequires:  llvm-devel >= 2.7
-BuildRequires:  glew-devel >= 1.5.4
+BuildRequires:  desktop-file-utils
 BuildRequires:  ffmpeg-devel
+BuildRequires:  gettext
+BuildRequires:  glew-devel >= 1.5.4
+BuildRequires:  glibmm24-devel
+BuildRequires:  gtkglext-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libffi-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  librtmp-devel
+BuildRequires:  llvm-devel >= 2.7
 BuildRequires:  nasm
+BuildRequires:  ncurses-devel
+BuildRequires:  pcre-devel
 BuildRequires:  SDL2-devel
 BuildRequires:  SDL2_mixer-devel
-BuildRequires:  gtkglext-devel
-BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  pcre-devel
-BuildRequires:  xulrunner-devel >= 1.9.2
-BuildRequires:  desktop-file-utils
-BuildRequires:  libcurl-devel
-BuildRequires:  boost-devel
-BuildRequires:  gettext
-BuildRequires:  libxml++-devel >= 2.33.1
-BuildRequires:  librtmp-devel
-BuildRequires:  libffi-devel
 BuildRequires:  xz-devel
-BuildRequires:  ncurses-devel
 
 
 %description
@@ -84,21 +83,32 @@ gnash for unsupported SWF files ( AS2/avm1 ); to enable this feature
 install gnash ( without gnash-plugin ).
 
 
+%package chromium-plugin
+Summary:       Chromium compatible plugin for %{name}
+Requires:      chromium
+Requires:      %{name} = %{version}-%{release}
+
+%description chromium-plugin
+This is the Chromium compatible plugin for %{name}.
+
+
 %prep
+%if %{git}
 %setup -q -n %{name}-%{commit}
+%else
+%setup -q -n %{name}-%{name}-%{version}
+%endif
 %patch0 -p1 -b .ffmpeg-include-dir
 
 
 %build
-%cmake -DCOMPILE_PLUGIN=1 \
-       -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
-       -DENABLE_SOUND=1 \
+%cmake -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
+       -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
 %if %{debug}
        -DCMAKE_BUILD_TYPE=Debug \
 %else
        -DCMAKE_BUILD_TYPE=Release \
 %endif
-       -DAUDIO_BACKEND=pulse \
        .
 
 %make_build VERBOSE=1
@@ -149,8 +159,19 @@ fi
 %license COPYING COPYING.LESSER
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
+%files chromium-plugin
+%license COPYING COPYING.LESSER
+%{_libdir}/chromium-browser/PepperFlash/libpepflashplayer.so
+%{_libdir}/chromium-browser/PepperFlash/manifest.json
+
 
 %changelog
+* Wed Jul 26 2017 Xavier Bachelot <xavier@bachelot.org> - 0.8.0-1
+- Update to 0.8.0.
+- Add chromium plugin sub-package.
+- Clean up BR:s.
+- Clean up build options.
+
 * Sat Apr 29 2017 Leigh Scott <leigh123linux@googlemail.com> - 0.7.2-13.20170422git.1
 - Rebuild for ffmpeg update
 
