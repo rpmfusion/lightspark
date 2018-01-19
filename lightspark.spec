@@ -34,6 +34,8 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{name}-%{versi
 %endif
 
 Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
+# Patch based on https://github.com/lightspark/lightspark/commit/1f6a694b17db9631e13caa32b58778d1812dd27b
+Patch1:         llvm5.patch
 
 # Build fails on ppc64 and ppc64le, temporarily disable them
 # https://github.com/lightspark/lightspark/issues/283
@@ -99,7 +101,7 @@ This is the Chromium compatible plugin for %{name}.
 %setup -q -n %{name}-%{name}-%{version}
 %endif
 %patch0 -p1 -b .ffmpeg-include-dir
-
+%patch1 -p1 -b .llvm5
 
 %build
 %cmake -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
