@@ -23,7 +23,7 @@
 
 Name:           lightspark
 Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
+Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.2
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -42,7 +42,7 @@ Patch1:         llvm5.patch
 ExcludeArch:    ppc64 ppc64le
 
 BuildRequires:  boost-devel
-BuildRequires:  cmake
+BuildRequires:  cmake3
 BuildRequires:  desktop-file-utils
 BuildRequires:  ffmpeg-devel
 BuildRequires:  gettext
@@ -104,7 +104,7 @@ This is the Chromium compatible plugin for %{name}.
 %patch1 -p1 -b .llvm5
 
 %build
-%cmake -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
+%cmake3 -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
        -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
 %if %{debug}
        -DCMAKE_BUILD_TYPE=Debug \
@@ -130,21 +130,6 @@ rm $RPM_BUILD_ROOT%{_libdir}/%{name}/lib%{name}.so
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
-%post
-/usr/bin/update-desktop-database &> /dev/null || :
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-
-%postun
-/usr/bin/update-desktop-database &> /dev/null || :
-if [ $1 -eq 0 ] ; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-fi
-
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
-
 %files -f %{name}.lang
 %license COPYING COPYING.LESSER
 %doc ChangeLog
@@ -168,6 +153,10 @@ fi
 
 
 %changelog
+* Tue Feb 06 2018 Leigh Scott <leigh123linux@googlemail.com> - 0.8.0-2.2
+- Rebuild for boost-1.66
+- Remove scriptlets
+
 * Thu Jan 18 2018 Leigh Scott <leigh123linux@googlemail.com> - 0.8.0-2.1
 - Rebuilt for ffmpeg-3.5 git
 
