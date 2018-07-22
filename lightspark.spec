@@ -17,13 +17,9 @@
 %define pre rc1
 %endif
 
-%define rel 2
-
-%define major 0.8.0
-
 Name:           lightspark
-Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.4
+Version:        0.8.1
+Release:        %{?pre:0.}1%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -45,6 +41,7 @@ BuildRequires:  boost-devel
 BuildRequires:  cmake3
 BuildRequires:  desktop-file-utils
 BuildRequires:  ffmpeg-devel
+BuildRequires:  gcc-c++
 BuildRequires:  gettext
 BuildRequires:  glew-devel >= 1.5.4
 BuildRequires:  glibmm24-devel
@@ -101,7 +98,6 @@ This is the Chromium compatible plugin for %{name}.
 %setup -q -n %{name}-%{name}-%{version}
 %endif
 %patch0 -p1 -b .ffmpeg-include-dir
-%patch1 -p1 -b .llvm5
 
 %build
 %cmake3 -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
@@ -153,6 +149,11 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Sat Jul 21 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-1
+- Update to 0.8.1.
+- Add BR: gcc-c++.
+- Simplify Version: and Release: handling.
+
 * Thu Mar 08 2018 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 0.8.0-2.4
 - Rebuilt for new ffmpeg snapshot
 
