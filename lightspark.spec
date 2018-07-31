@@ -19,7 +19,7 @@
 
 Name:           lightspark
 Version:        0.8.1
-Release:        %{?pre:0.}1%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}2%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -31,9 +31,9 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{name}-%{versi
 
 Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
 
-# Build fails on ppc64 and ppc64le, temporarily disable them
+# Build fails on ppc64, temporarily disable it
 # https://github.com/lightspark/lightspark/issues/283
-ExcludeArch:    ppc64 ppc64le
+ExcludeArch:    ppc64
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake3
@@ -147,6 +147,9 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Tue Jul 31 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-2
+- Remove ppc64le from ExcludeArch:.
+
 * Sat Jul 21 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-1
 - Update to 0.8.1.
 - Add BR: gcc-c++.
