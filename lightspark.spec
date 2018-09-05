@@ -19,7 +19,7 @@
 
 Name:           lightspark
 Version:        0.8.1
-Release:        %{?pre:0.}2%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}3%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -30,10 +30,10 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{name}-%{versi
 %endif
 
 Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
-
-# Build fails on ppc64, temporarily disable it
-# https://github.com/lightspark/lightspark/issues/283
-ExcludeArch:    ppc64
+# https://github.com/lightspark/lightspark/commit/8f9d470f2fe9bb729a41ebe2807853dd11c0eeb3
+Patch1:         lightspark-0.8.1-ppc64_buildfix.patch
+# https://github.com/lightspark/lightspark/commit/3e0fe0862af60768716b04543790cfc80cf75b1d
+Patch2:         lightspark-0.8.1-big_endian_buildfix.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake3
@@ -96,6 +96,9 @@ This is the Chromium compatible plugin for %{name}.
 %setup -q -n %{name}-%{name}-%{version}
 %endif
 %patch0 -p1 -b .ffmpeg-include-dir
+%patch1 -p1 -b .ppc64_buildfix
+%patch2 -p1 -b .big_endian_buildfix
+
 
 %build
 %cmake3 -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
@@ -147,6 +150,9 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Tue Sep 04 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-3
+- Fix build on ppc64.
+
 * Tue Jul 31 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-2
 - Remove ppc64le from ExcludeArch:.
 

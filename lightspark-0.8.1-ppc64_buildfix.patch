@@ -1,0 +1,22 @@
+From 8f9d470f2fe9bb729a41ebe2807853dd11c0eeb3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ludger=20Kr=C3=A4mer?= <dbluelle@onlinehome.de>
+Date: Sun, 19 Aug 2018 17:37:47 +0200
+Subject: [PATCH] fix compilation for ppc
+
+---
+ src/platforms/engineutils.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/platforms/engineutils.h b/src/platforms/engineutils.h
+index 49e172617..32e328c29 100644
+--- a/src/platforms/engineutils.h
++++ b/src/platforms/engineutils.h
+@@ -21,6 +21,8 @@
+ #define PLATFORMS_ENGINEUTILS_H 1
+ 
+ #include <SDL2/SDL.h>
++// on ppc SDL.h includes altivec.h, so we have to undefine vector
++#undef vector
+ #include "compat.h"
+ #include "threading.h"
+ #include "tiny_string.h"
