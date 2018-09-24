@@ -19,7 +19,7 @@
 
 Name:           lightspark
 Version:        0.8.1
-Release:        %{?pre:0.}3%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}4%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -34,6 +34,8 @@ Patch0:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
 Patch1:         lightspark-0.8.1-ppc64_buildfix.patch
 # https://github.com/lightspark/lightspark/commit/3e0fe0862af60768716b04543790cfc80cf75b1d
 Patch2:         lightspark-0.8.1-big_endian_buildfix.patch
+# https://github.com/lightspark/lightspark/commit/aa970bcfa33cf9e88647e8268c4a18f7670c8d75
+Patch3:         lightspark-0.8.1-make_llvm_optional.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake3
@@ -48,7 +50,6 @@ BuildRequires:  libcurl-devel
 BuildRequires:  libffi-devel
 BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  librtmp-devel
-BuildRequires:  llvm-devel >= 2.7
 BuildRequires:  nasm
 BuildRequires:  ncurses-devel
 BuildRequires:  pcre-devel
@@ -98,6 +99,7 @@ This is the Chromium compatible plugin for %{name}.
 %patch0 -p1 -b .ffmpeg-include-dir
 %patch1 -p1 -b .ppc64_buildfix
 %patch2 -p1 -b .big_endian_buildfix
+%patch3 -p1 -b .disable_llvm
 
 
 %build
@@ -150,6 +152,9 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Mon Sep 24 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-4
+- Add patch to disable llvm dependency.
+
 * Tue Sep 04 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-3
 - Fix build on ppc64.
 
