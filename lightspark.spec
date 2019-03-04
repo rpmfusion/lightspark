@@ -19,7 +19,7 @@
 
 Name:           lightspark
 Version:        0.8.1
-Release:        %{?pre:0.}4%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Release:        %{?pre:0.}4%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}.1
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -152,6 +152,9 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Mon Mar 04 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.1-4.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Mon Sep 24 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-4
 - Add patch to disable llvm dependency.
 
