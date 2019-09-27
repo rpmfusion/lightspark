@@ -1,42 +1,21 @@
-%define debug 0
+%bcond_with tightspark
 
-%define git 0
-
-%if %{git}
-%define git_snapshot 1
-%endif
-
-%define pre_release 0
-
-%if %{?git}
-%define commit 7dd881170a1ed48596c19bac48cdcdd403f70841
-%define date 20170422
-%endif
-
-%if %{pre_release}
-%define pre rc1
-%endif
+#global git_snapshot 1
+%global commit       7dd881170a1ed48596c19bac48cdcdd403f70841
+%global commit_short %(c=%{commit}; echo ${c:0:7})
+%global date         20170422
 
 Name:           lightspark
-Version:        0.8.1
-Release:        %{?pre:0.}5%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Version:        0.8.2
+Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
-%if %{git}
-Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git.tar.gz
+%if 0%{?git_snapshot}
+Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git%{commit_short}.tar.gz
 %else
-Source0:        https://github.com/lightspark/lightspark/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
-
-# https://github.com/lightspark/lightspark/commit/8f9d470f2fe9bb729a41ebe2807853dd11c0eeb3
-Patch1:         lightspark-0.8.1-ppc64_buildfix.patch
-# https://github.com/lightspark/lightspark/commit/3e0fe0862af60768716b04543790cfc80cf75b1d
-Patch2:         lightspark-0.8.1-big_endian_buildfix.patch
-# https://github.com/lightspark/lightspark/commit/aa970bcfa33cf9e88647e8268c4a18f7670c8d75
-Patch3:         lightspark-0.8.1-make_llvm_optional.patch
-# https://github.com/lightspark/lightspark/commit/cebe33766bd1d672618a2931ceb50ae64fb994ed
-Patch4:         lightspark-0.8.1-use_libswresample.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake3
@@ -92,26 +71,20 @@ This is the Chromium compatible plugin for %{name}.
 
 
 %prep
-%if %{git}
+%if 0%{?git_snapshot}
 %setup -q -n %{name}-%{commit}
 %else
-%setup -q -n %{name}-%{name}-%{version}
+%setup -q -n %{name}-%{version}
 %endif
-%patch1 -p1 -b .ppc64_buildfix
-%patch2 -p1 -b .big_endian_buildfix
-%patch3 -p1 -b .disable_llvm
-%patch4 -p1 -b .libswresample
 
 
 %build
-%cmake3 -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
-       -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
-%if %{debug}
-       -DCMAKE_BUILD_TYPE=Debug \
-%else
-       -DCMAKE_BUILD_TYPE=Release \
-%endif
-       .
+%cmake3 \
+    -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
+    -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+%{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1} \
+     .
 
 %make_build VERBOSE=1
 
@@ -120,14 +93,16 @@ This is the Chromium compatible plugin for %{name}.
 %make_install
 %find_lang %{name}
 
-pushd $RPM_BUILD_ROOT%{_datadir}/man/man1
+%if %{with tightspark}
+pushd %{buildroot}%{_datadir}/man/man1
     ln -s %{name}.1.gz tightspark.1.gz
 popd
+%endif
 
 #remove devel file from package
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/lib%{name}.so
+rm %{buildroot}%{_libdir}/%{name}/lib%{name}.so
 
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %files -f %{name}.lang
@@ -135,11 +110,11 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 %doc ChangeLog
 %config(noreplace) %{_sysconfdir}/xdg/lightspark.conf
 %{_bindir}/%{name}
-%{_bindir}/tightspark
+%{?with_tightspark:%{_bindir}/tightspark}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
 %{_datadir}/man/man1/%{name}.1.*
-%{_datadir}/man/man1/tightspark.1.*
+%{?with_tightspark:%{_datadir}/man/man1/tightspark.1.*}
 %{_libdir}/%{name}/
 
 %files mozilla-plugin
@@ -153,6 +128,13 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Fri Sep 27 2019 Xavier Bachelot <xavier@bachelot.org> - 0.8.2-1
+- Update to 0.8.2.
+- Build with debuginfo enabled.
+- Remove pre_release and simplify snapshot handling.
+- Minor spec cleanup.
+- tightspark is not built by default anymore, add a bcond_with switch.
+
 * Mon Aug 12 2019 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-5
 - Add patch to build with libswresample rather than deprecated libavresample.
 - Drop old ffmpeg include dir patch.
