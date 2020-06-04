@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.2
-Release:        3%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        4%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -128,6 +128,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Thu Jun 04 2020 Leigh Scott <leigh123linux@gmail.com> - 0.8.2-4
+- Rebuilt for Boost 1.73
+
 * Sat Feb 22 2020 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 0.8.2-3
 - Rebuild for ffmpeg-4.3 git
 
