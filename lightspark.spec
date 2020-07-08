@@ -6,8 +6,8 @@
 %global date         20170422
 
 Name:           lightspark
-Version:        0.8.2
-Release:        4%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Version:        0.8.3
+Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -17,7 +17,6 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.g
 Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
 
-BuildRequires:  boost-devel
 BuildRequires:  cmake3
 BuildRequires:  desktop-file-utils
 BuildRequires:  ffmpeg-devel
@@ -128,6 +127,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Wed Jul 08 2020 Xavier Bachelot <xavier@bachelot.org> - 0.8.3-1
+- Update to 0.8.3
+
 * Thu Jun 04 2020 Leigh Scott <leigh123linux@gmail.com> - 0.8.2-4
 - Rebuilt for Boost 1.73
 
