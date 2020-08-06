@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.3
-Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        2%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -85,11 +85,11 @@ This is the Chromium compatible plugin for %{name}.
 %{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1} \
      .
 
-%make_build VERBOSE=1
+%cmake_build
 
 
 %install
-%make_install
+%cmake_install
 %find_lang %{name}
 
 %if %{with tightspark}
@@ -127,6 +127,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Thu Aug 06 2020 Xavier Bachelot <xavier@bachelot.org> - 0.8.3-2
+- Use new cmake macros
+
 * Wed Jul 08 2020 Xavier Bachelot <xavier@bachelot.org> - 0.8.3-1
 - Update to 0.8.3
 
