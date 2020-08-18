@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.3
-Release:        2%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        3%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -127,6 +127,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Tue Aug 18 2020 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Thu Aug 06 2020 Xavier Bachelot <xavier@bachelot.org> - 0.8.3-2
 - Use new cmake macros
 
