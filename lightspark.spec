@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.3
-Release:        4%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        5%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -127,6 +127,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Wed Feb 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Fri Jan  1 2021 Leigh Scott <leigh123linux@gmail.com> - 0.8.3-4
 - Rebuilt for new ffmpeg snapshot
 
