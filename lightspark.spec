@@ -1,13 +1,13 @@
 %bcond_with tightspark
 
 #global git_snapshot 1
-%global commit       7dd881170a1ed48596c19bac48cdcdd403f70841
+%global commit       8a9ea814e7d244f8ca6d7420ccedf01972931036
 %global commit_short %(c=%{commit}; echo ${c:0:7})
-%global date         20170422
+%global date         20210202
 
 Name:           lightspark
-Version:        0.8.3
-Release:        5%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Version:        0.8.4
+Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -127,6 +127,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Mon Mar 15 2021 Aaron Stern <ukbeast89@protonmail.com> - 0.8.4-1
+- Update to 0.8.4
+
 * Wed Feb 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
