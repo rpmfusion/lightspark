@@ -6,8 +6,8 @@
 %global date         20170422
 
 Name:           lightspark
-Version:        0.8.3
-Release:        6%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Version:        0.8.5
+Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -23,7 +23,6 @@ BuildRequires:  ffmpeg-devel
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
 BuildRequires:  glew-devel >= 1.5.4
-BuildRequires:  glibmm24-devel
 BuildRequires:  gtkglext-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  libffi-devel
@@ -31,7 +30,6 @@ BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  librtmp-devel
 BuildRequires:  nasm
 BuildRequires:  ncurses-devel
-BuildRequires:  pcre-devel
 BuildRequires:  SDL2-devel
 BuildRequires:  SDL2_mixer-devel
 BuildRequires:  xz-devel
@@ -127,6 +125,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Wed Sep 15 2021 Xavier Bachelot <xavier@bachelot.org> - 0.8.5-1
+- Update to 0.8.5
+
 * Tue Aug 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
