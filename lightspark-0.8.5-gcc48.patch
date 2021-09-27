@@ -1,0 +1,108 @@
+From 4d81b0977433f52d944d89a3c527162eb4a15c2f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ludger=20Kr=C3=A4mer?= <dbluelle@onlinehome.de>
+Date: Fri, 24 Sep 2021 17:56:50 +0200
+Subject: [PATCH] fix copmpilation on CentOS 7 fixes #808
+
+---
+ src/scripting/abc_opcodes.cpp                           | 4 ++--
+ src/scripting/flash/globalization/collator.cpp          | 2 +-
+ src/scripting/flash/globalization/currencyformatter.cpp | 2 +-
+ src/scripting/flash/globalization/datetimeformatter.cpp | 2 +-
+ src/scripting/flash/globalization/localeid.cpp          | 2 +-
+ src/scripting/flash/globalization/numberformatter.cpp   | 2 +-
+ src/scripting/flash/globalization/stringtools.cpp       | 2 +-
+ 7 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/scripting/abc_opcodes.cpp b/src/scripting/abc_opcodes.cpp
+index 5efa29bbb..a0f35ecfc 100644
+--- a/src/scripting/abc_opcodes.cpp
++++ b/src/scripting/abc_opcodes.cpp
+@@ -2842,8 +2842,8 @@ void ABCVm::newClass(call_context* th, int n)
+ 		ret->getGlobalScope()->setVariableByQName(mname->name_s_id,mname->ns[0], ret,DECLARED_TRAIT);
+ 	th->mi->context->root->bindClass(className,ret);
+ 
+-	auto j = th->mi->context->root->applicationDomain->classesSuperNotFilled.cbegin();
+-	while (j != th->mi->context->root->applicationDomain->classesSuperNotFilled.cend())
++	auto j = th->mi->context->root->applicationDomain->classesSuperNotFilled.begin();
++	while (j != th->mi->context->root->applicationDomain->classesSuperNotFilled.end())
+ 	{
+ 		if((*j)->super == ret)
+ 		{
+diff --git a/src/scripting/flash/globalization/collator.cpp b/src/scripting/flash/globalization/collator.cpp
+index 9c4e8deb9..2cda2dde9 100644
+--- a/src/scripting/flash/globalization/collator.cpp
++++ b/src/scripting/flash/globalization/collator.cpp
+@@ -51,7 +51,7 @@ ASFUNCTIONBODY_ATOM(Collator,_constructor)
+ 	if (sys->localeManager->isLocaleAvailableOnSystem(th->requestedLocaleIDName))
+ 	{
+ 		std::string localeName = sys->localeManager->getSystemLocaleName(th->requestedLocaleIDName);
+-		th->currlocale = std::locale(localeName);
++		th->currlocale = std::locale(localeName.c_str());
+ 		th->actualLocaleIDName = th->requestedLocaleIDName;
+ 		th->lastOperationStatus="noError";
+ 	}
+diff --git a/src/scripting/flash/globalization/currencyformatter.cpp b/src/scripting/flash/globalization/currencyformatter.cpp
+index bb717d163..dc0b18d86 100644
+--- a/src/scripting/flash/globalization/currencyformatter.cpp
++++ b/src/scripting/flash/globalization/currencyformatter.cpp
+@@ -84,7 +84,7 @@ ASFUNCTIONBODY_ATOM(CurrencyFormatter,_constructor)
+ 	}
+ 
+ 	std::string localeName = sys->localeManager->getSystemLocaleName(th->requestedLocaleIDName);
+-	th->currlocale = std::locale(localeName);
++	th->currlocale = std::locale(localeName.c_str());
+ 	th->actualLocaleIDName = th->requestedLocaleIDName;
+ 	th->lastOperationStatus="noError";
+ 
+diff --git a/src/scripting/flash/globalization/datetimeformatter.cpp b/src/scripting/flash/globalization/datetimeformatter.cpp
+index b2a518db2..547473c10 100644
+--- a/src/scripting/flash/globalization/datetimeformatter.cpp
++++ b/src/scripting/flash/globalization/datetimeformatter.cpp
+@@ -78,7 +78,7 @@ ASFUNCTIONBODY_ATOM(DateTimeFormatter,_constructor)
+ 	if (sys->localeManager->isLocaleAvailableOnSystem(th->requestedLocaleIDName))
+ 	{
+ 		std::string localeName = sys->localeManager->getSystemLocaleName(th->requestedLocaleIDName);
+-		th->currlocale = std::locale(localeName);
++		th->currlocale = std::locale(localeName.c_str());
+ 		th->actualLocaleIDName = th->requestedLocaleIDName;
+ 		th->lastOperationStatus="noError";
+ 	}
+diff --git a/src/scripting/flash/globalization/localeid.cpp b/src/scripting/flash/globalization/localeid.cpp
+index 822fe3790..4d11de444 100644
+--- a/src/scripting/flash/globalization/localeid.cpp
++++ b/src/scripting/flash/globalization/localeid.cpp
+@@ -58,7 +58,7 @@ ASFUNCTIONBODY_ATOM(LocaleID,_constructor)
+ 	if (sys->localeManager->isLocaleAvailableOnSystem(th->requestedLocaleIDName))
+ 	{
+ 		std::string localeName = sys->localeManager->getSystemLocaleName(th->requestedLocaleIDName);
+-		th->currlocale = std::locale(localeName);
++		th->currlocale = std::locale(localeName.c_str());
+ 		th->actualLocaleIDName = th->requestedLocaleIDName;
+ 		th->lastOperationStatus="noError";
+ 	}
+diff --git a/src/scripting/flash/globalization/numberformatter.cpp b/src/scripting/flash/globalization/numberformatter.cpp
+index 54b190629..619a54198 100644
+--- a/src/scripting/flash/globalization/numberformatter.cpp
++++ b/src/scripting/flash/globalization/numberformatter.cpp
+@@ -76,7 +76,7 @@ ASFUNCTIONBODY_ATOM(NumberFormatter,_constructor)
+ 	if (sys->localeManager->isLocaleAvailableOnSystem(th->requestedLocaleIDName))
+ 	{
+ 		std::string localeName = sys->localeManager->getSystemLocaleName(th->requestedLocaleIDName);
+-		th->currlocale = std::locale(localeName);
++		th->currlocale = std::locale(localeName.c_str());
+ 		th->actualLocaleIDName = th->requestedLocaleIDName;
+ 		th->lastOperationStatus="noError";
+ 	}
+diff --git a/src/scripting/flash/globalization/stringtools.cpp b/src/scripting/flash/globalization/stringtools.cpp
+index 9f4f9115e..ce63769c6 100644
+--- a/src/scripting/flash/globalization/stringtools.cpp
++++ b/src/scripting/flash/globalization/stringtools.cpp
+@@ -52,7 +52,7 @@ ASFUNCTIONBODY_ATOM(StringTools,_constructor)
+ 	if (sys->localeManager->isLocaleAvailableOnSystem(th->requestedLocaleIDName))
+ 	{
+ 		std::string localeName = sys->localeManager->getSystemLocaleName(th->requestedLocaleIDName);
+-		th->currlocale = std::locale(localeName);
++		th->currlocale = std::locale(localeName.c_str());
+ 		th->actualLocaleIDName = th->requestedLocaleIDName;
+ 		th->lastOperationStatus="noError";
+ 	}

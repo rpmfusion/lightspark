@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.5
-Release:        2%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        3%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -16,6 +16,10 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.g
 %else
 Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
+
+# Fix build on EL7 (gcc4.8)
+# https://github.com/lightspark/lightspark/commit/4d81b0977433f52d944d89a3c527162eb4a15c2f.patch
+Patch0:         lightspark-0.8.5-gcc48.patch
 
 BuildRequires:  cmake3
 BuildRequires:  desktop-file-utils
@@ -72,6 +76,7 @@ This is the Chromium compatible plugin for %{name}.
 %setup -q -n %{name}-%{commit}
 %else
 %setup -q -n %{name}-%{version}
+%patch0 -p1 -b .gcc48
 %endif
 
 
@@ -83,11 +88,11 @@ This is the Chromium compatible plugin for %{name}.
 %{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1} \
      .
 
-%cmake_build
+%cmake3_build
 
 
 %install
-%cmake_install
+%cmake3_install
 %find_lang %{name}
 
 %if %{with tightspark}
@@ -125,6 +130,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Fri Nov 26 2021 Xavier Bachelot <xavier@bachelot.org> - 0.8.5-3
+- Fix build for EL7 (gcc 4.8)
+
 * Thu Nov 11 2021 Leigh Scott <leigh123linux@gmail.com> - 0.8.5-2
 - Rebuilt for new ffmpeg snapshot
 
