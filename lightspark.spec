@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.5
-Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        2%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -125,6 +125,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
 %changelog
+* Thu Nov 11 2021 Leigh Scott <leigh123linux@gmail.com> - 0.8.5-2
+- Rebuilt for new ffmpeg snapshot
+
 * Wed Sep 15 2021 Xavier Bachelot <xavier@bachelot.org> - 0.8.5-1
 - Update to 0.8.5
 
