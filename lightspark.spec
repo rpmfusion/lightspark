@@ -1,68 +1,47 @@
-%define debug 0
+%bcond_with tightspark
 
-%define git 1
-
-%if %{git}
-%define git_snapshot 1
-%endif
-
-%define pre_release 0
-
-%if %{?git}
-%define commit c974834f93d93bc0f2713a75da62025984cb02f3
-%define date 20140219
-%endif
-
-%if %{pre_release}
-%define pre rc1
-%endif 
-
-%define rel 8
-
-%define major 0.7.2
+#global git_snapshot 1
+%global commit       7dd881170a1ed48596c19bac48cdcdd403f70841
+%global commit_short %(c=%{commit}; echo ${c:0:7})
+%global date         20170422
 
 Name:           lightspark
-Version:        %{major}
-Release:        %{?pre:0.}%{rel}%{?git_snapshot:.%{date}git}%{?pre:.%{pre}}%{?dist}
+Version:        0.8.5
+Release:        4%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
-
-Group:          Applications/Multimedia
 License:        LGPLv3+
-URL:            http://lightspark.sourceforge.net
-%if %{git}
-# This is a git snapshot, to get it, follow this steps :
-# git clone git://github.com/lightspark/lightspark.git
-# cd %%{name}
-# git checkout %%{commit} *
-# rm -rf .git && cd ..
-# mv %%{name} %%{name}-%%{version}
-# tar cjf %%{name}-%%{version}-%%{date}git.tar.bz2 %%{name}-%%{version}       
-Source0:        %{name}-%{version}-%{date}git.tar.bz2
+URL:            http://lightspark.github.io/
+%if 0%{?git_snapshot}
+Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git%{commit_short}.tar.gz
 %else
-Source0:        http://launchpad.net/%{name}/trunk/%{name}-%{version}/+download/%{name}-%{version}%{?pre:~%{pre}}.tar.gz
+Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
 
-Patch2:         lightspark-0.7.2-llvm-libs-hack.patch
-Patch3:         lightspark-0.7.2-fix_ffmpeg_include_dir.patch
+# Fix build on EL7 (gcc4.8)
+# https://github.com/lightspark/lightspark/commit/4d81b0977433f52d944d89a3c527162eb4a15c2f.patch
+Patch0:         lightspark-0.8.5-gcc48.patch
+# Fix build against ffmpeg 4.5
+# https://github.com/lightspark/lightspark/commit/50297fc5f79cd88aebf7ef86aa9466d7933dce65.patch
+# https://github.com/lightspark/lightspark/commit/e525ae0c317e79b2eabe9d4e657833e3dc290eb7.patch
+Patch1:         lightspark-0.8.5-ffmpeg45.patch
 
-BuildRequires:  cmake
-BuildRequires:  llvm-devel >= 2.7
-BuildRequires:  glew-devel >= 1.5.4
-BuildRequires:  ffmpeg-devel
-BuildRequires:  nasm
-BuildRequires:  SDL-devel
-BuildRequires:  gtkglext-devel
-BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  pcre-devel
-BuildRequires:  xulrunner-devel >= 1.9.2
+BuildRequires:  cmake3
 BuildRequires:  desktop-file-utils
-BuildRequires:  libcurl-devel
-BuildRequires:  boost-devel
+BuildRequires:  ffmpeg-devel
+BuildRequires:  gcc-c++
 BuildRequires:  gettext
-BuildRequires:  libxml++-devel >= 2.33.1
-BuildRequires:  librtmp-devel
+BuildRequires:  glew-devel >= 1.5.4
+BuildRequires:  gtkglext-devel
+BuildRequires:  libcurl-devel
 BuildRequires:  libffi-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  librtmp-devel
+BuildRequires:  nasm
+BuildRequires:  ncurses-devel
+BuildRequires:  SDL2-devel
+BuildRequires:  SDL2_mixer-devel
 BuildRequires:  xz-devel
+
 
 %description
 Lightspark is a modern, free, open-source flash player implementation.
@@ -71,9 +50,10 @@ Lightspark features:
 * JIT compilation of Actionscript to native x86 byte code using LLVM
 * Hardware accelerated rendering using OpenGL Shaders (GLSL)
 * Very good and robust support for current-generation Actionscript 3
-* A new, clean, code base exploiting Multi-Threading and optimized for 
-modern hardware. Designed from scratch after the official Flash 
+* A new, clean, code base exploiting Multi-Threading and optimized for
+modern hardware. Designed from scratch after the official Flash
 documentation was released.
+
 
 %package mozilla-plugin
 Summary:       Mozilla compatible plugin for %{name}
@@ -85,78 +65,205 @@ This is the Mozilla compatible plugin for %{name}. It can fallback to
 gnash for unsupported SWF files ( AS2/avm1 ); to enable this feature
 install gnash ( without gnash-plugin ).
 
+
+%package chromium-plugin
+Summary:       Chromium compatible plugin for %{name}
+Requires:      chromium
+Requires:      %{name} = %{version}-%{release}
+
+%description chromium-plugin
+This is the Chromium compatible plugin for %{name}.
+
+
 %prep
-%setup -q -n %{name}-%{version}%{?pre:~%{pre}}
-%patch2 -p1 -b .llvm-libs-hack
-%patch3 -p1 -b .ffmpeg-include-dir
+%if 0%{?git_snapshot}
+%setup -q -n %{name}-%{commit}
+%else
+%setup -q -n %{name}-%{version}
+%patch0 -p1 -b .gcc48
+%patch1 -p1 -b .ffmpeg45
+%endif
+
 
 %build
-%cmake -DCOMPILE_PLUGIN=1  \
-       -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
-       -DENABLE_SOUND=1 \
-%if %{debug}
-       -DCMAKE_BUILD_TYPE=Debug \
-%else
-       -DCMAKE_BUILD_TYPE=Release \
-%endif
-       -DAUDIO_BACKEND=pulse \
-       .
+%cmake3 \
+    -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
+    -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+%{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1} \
+     .
 
-make VERBOSE=1 %{?_smp_mflags}
+%cmake3_build
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%cmake3_install
 %find_lang %{name}
 
-pushd $RPM_BUILD_ROOT%{_datadir}/man/man1
+%if %{with tightspark}
+pushd %{buildroot}%{_datadir}/man/man1
     ln -s %{name}.1.gz tightspark.1.gz
 popd
+%endif
 
 #remove devel file from package
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/lib%{name}.so
+rm %{buildroot}%{_libdir}/%{name}/lib%{name}.so
 
-install -Dpm 644 media/%{name}-logo.svg $RPM_BUILD_ROOT%{_datadir}/%{name}
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-%post
-update-desktop-database &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-
-%postun
-update-desktop-database &> /dev/null || :
-if [ $1 -eq 0 ] ; then
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-fi
-
-%posttrans
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f %{name}.lang
-%defattr(-,root,root,-)
-%doc COPYING COPYING.LESSER ChangeLog
+%license COPYING COPYING.LESSER
+%doc ChangeLog
 %config(noreplace) %{_sysconfdir}/xdg/lightspark.conf
 %{_bindir}/%{name}
-%{_bindir}/tightspark
-%{_datadir}/%{name}
+%{?with_tightspark:%{_bindir}/tightspark}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
-%{_datadir}/man/man1/%{name}.1.gz
-%{_datadir}/man/man1/tightspark.1.gz
-%{_libdir}/%{name}
+%{_datadir}/man/man1/%{name}.1.*
+%{?with_tightspark:%{_datadir}/man/man1/tightspark.1.*}
+%{_libdir}/%{name}/
 
 %files mozilla-plugin
-%defattr(-,root,root,-)
-%doc COPYING COPYING.LESSER
+%license COPYING COPYING.LESSER
 %{_libdir}/mozilla/plugins/lib%{name}plugin.so
 
+%files chromium-plugin
+%license COPYING COPYING.LESSER
+%{_libdir}/chromium-browser/PepperFlash/libpepflashplayer.so
+%{_libdir}/chromium-browser/PepperFlash/manifest.json
+
+
 %changelog
+* Fri Nov 26 2021 Xavier Bachelot <xavier@bachelot.org> - 0.8.5-4
+- Fix build with ffmpeg 4.5
+
+* Fri Nov 26 2021 Xavier Bachelot <xavier@bachelot.org> - 0.8.5-3
+- Fix build for EL7 (gcc 4.8)
+
+* Thu Nov 11 2021 Leigh Scott <leigh123linux@gmail.com> - 0.8.5-2
+- Rebuilt for new ffmpeg snapshot
+
+* Wed Sep 15 2021 Xavier Bachelot <xavier@bachelot.org> - 0.8.5-1
+- Update to 0.8.5
+
+* Tue Aug 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Wed Feb 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Fri Jan  1 2021 Leigh Scott <leigh123linux@gmail.com> - 0.8.3-4
+- Rebuilt for new ffmpeg snapshot
+
+* Tue Aug 18 2020 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Thu Aug 06 2020 Xavier Bachelot <xavier@bachelot.org> - 0.8.3-2
+- Use new cmake macros
+
+* Wed Jul 08 2020 Xavier Bachelot <xavier@bachelot.org> - 0.8.3-1
+- Update to 0.8.3
+
+* Thu Jun 04 2020 Leigh Scott <leigh123linux@gmail.com> - 0.8.2-4
+- Rebuilt for Boost 1.73
+
+* Sat Feb 22 2020 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 0.8.2-3
+- Rebuild for ffmpeg-4.3 git
+
+* Tue Feb 04 2020 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Fri Sep 27 2019 Xavier Bachelot <xavier@bachelot.org> - 0.8.2-1
+- Update to 0.8.2.
+- Build with debuginfo enabled.
+- Remove pre_release and simplify snapshot handling.
+- Minor spec cleanup.
+- tightspark is not built by default anymore, add a bcond_with switch.
+
+* Mon Aug 12 2019 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-5
+- Add patch to build with libswresample rather than deprecated libavresample.
+- Drop old ffmpeg include dir patch.
+
+* Wed Aug 07 2019 Leigh Scott <leigh123linux@gmail.com> - 0.8.1-4.2
+- Rebuild for new ffmpeg version
+
+* Mon Mar 04 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 0.8.1-4.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Mon Sep 24 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-4
+- Add patch to disable llvm dependency.
+
+* Tue Sep 04 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-3
+- Fix build on ppc64.
+
+* Tue Jul 31 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-2
+- Remove ppc64le from ExcludeArch:.
+
+* Sat Jul 21 2018 Xavier Bachelot <xavier@bachelot.org> - 0.8.1-1
+- Update to 0.8.1.
+- Add BR: gcc-c++.
+- Simplify Version: and Release: handling.
+
+* Thu Mar 08 2018 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 0.8.0-2.4
+- Rebuilt for new ffmpeg snapshot
+
+* Thu Mar 01 2018 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 0.8.0-2.3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Tue Feb 06 2018 Leigh Scott <leigh123linux@googlemail.com> - 0.8.0-2.2
+- Rebuild for boost-1.66
+- Remove scriptlets
+
+* Thu Jan 18 2018 Leigh Scott <leigh123linux@googlemail.com> - 0.8.0-2.1
+- Rebuilt for ffmpeg-3.5 git
+
+* Tue Oct 17 2017 Leigh Scott <leigh123linux@googlemail.com> - 0.8.0-2
+- Rebuild for ffmpeg update
+
+* Thu Aug 31 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 0.8.0-1.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Wed Jul 26 2017 Xavier Bachelot <xavier@bachelot.org> - 0.8.0-1
+- Update to 0.8.0.
+- Add chromium plugin sub-package.
+- Clean up BR:s.
+- Clean up build options.
+
+* Sat Apr 29 2017 Leigh Scott <leigh123linux@googlemail.com> - 0.7.2-13.20170422git.1
+- Rebuild for ffmpeg update
+
+* Sun Apr 23 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-13.20170422git
+- New snapshot with LLVM 4.0 support.
+
+* Tue Apr 04 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-12.20170107git
+- Disable ppc64le and ppc64.
+
+* Thu Mar 23 2017 Xavier Bachelot <xavier@bachelot.org> - 0.7.2-11.20170107git
+- New snapshot.
+- Specfile cleanup.
+
+* Sun Mar 19 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 0.7.2-10.20160703git.5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
+* Sat Jul 30 2016 Julian Sikorski <belegdol@fedoraproject.org> - 0.7.2-10.20160703git.4
+- Rebuilt for ffmpeg-3.1.1
+
+* Sat Jul 09 2016 Leigh Scott <leigh123linux@googlemail.com> - 0.7.2-10.20160703git.3
+- Update to latest git
+
+* Mon Oct 20 2014 Sérgio Basto <sergio@serjux.com> - 0.7.2-10.20140219git.2
+- Rebuilt for FFmpeg 2.4.3
+
+* Fri Sep 26 2014 Nicolas Chauvet <kwizart@gmail.com> - 0.7.2-10.20140219git.1
+- Rebuilt for FFmpeg 2.4.x
+
+* Thu Aug 07 2014 Sérgio Basto <sergio@serjux.com> - 0.7.2-9.20140219git.1
+- Rebuilt for ffmpeg-2.3
+
+* Sun Aug 03 2014 Sérgio Basto <sergio@serjux.com> - 0.7.2-9.20140219git
+- Rebuilt for boost-1.55
+
 * Tue Mar 25 2014 Xavier Bachelot <xavier@bachelot.org> 0.7.2-8.20130827git
 - Rebuild for ffmpeg 2.2.
 
@@ -279,7 +386,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Drop noexecstack patch ( merged upstream )
 
 * Sat Nov 20 2010 Hicham HAOUARI <hicham.haouari@gmail.com> - 0.4.4.3-4
-- Avoid creating executable stack, fixes : 
+- Avoid creating executable stack, fixes :
   https://bugs.launchpad.net/lightspark/+bug/668677
 
 * Thu Oct 14 2010 Nicolas Chauvet <kwizart@gmail.com> - 0.4.4.3-2
