@@ -5,6 +5,8 @@
 %global commit_short %(c=%{commit}; echo ${c:0:7})
 %global date         20170422
 
+%undefine __cmake_in_source_build
+
 Name:           lightspark
 Version:        0.8.5
 Release:        6%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
@@ -90,8 +92,7 @@ This is the Chromium compatible plugin for %{name}.
     -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
     -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-%{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1} \
-     .
+%{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1}
 
 %cmake3_build
 
