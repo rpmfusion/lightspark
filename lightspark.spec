@@ -40,6 +40,7 @@ BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  librtmp-devel
 BuildRequires:  nasm
 BuildRequires:  ncurses-devel
+BuildRequires:  pcre-devel
 BuildRequires:  SDL2-devel
 BuildRequires:  SDL2_mixer-devel
 BuildRequires:  xz-devel
