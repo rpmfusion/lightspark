@@ -5,11 +5,9 @@
 %global commit_short %(c=%{commit}; echo ${c:0:7})
 %global date         20170422
 
-%undefine __cmake_in_source_build
-
 Name:           lightspark
-Version:        0.8.5
-Release:        7%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Version:        0.8.6
+Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -19,19 +17,10 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.g
 Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
 
-# Fix build on EL7 (gcc4.8)
-# https://github.com/lightspark/lightspark/commit/4d81b0977433f52d944d89a3c527162eb4a15c2f.patch
-Patch0:         lightspark-0.8.5-gcc48.patch
-# Fix build against ffmpeg 4.5
-# https://github.com/lightspark/lightspark/commit/50297fc5f79cd88aebf7ef86aa9466d7933dce65.patch
-# https://github.com/lightspark/lightspark/commit/e525ae0c317e79b2eabe9d4e657833e3dc290eb7.patch
-Patch1:         lightspark-0.8.5-ffmpeg45.patch
-
-BuildRequires:  cmake3
+BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  ffmpeg-devel
 BuildRequires:  gcc-c++
-BuildRequires:  gettext
 BuildRequires:  glew-devel >= 1.5.4
 BuildRequires:  gtkglext-devel
 BuildRequires:  libcurl-devel
@@ -40,7 +29,6 @@ BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  librtmp-devel
 BuildRequires:  nasm
 BuildRequires:  ncurses-devel
-BuildRequires:  pcre-devel
 BuildRequires:  SDL2-devel
 BuildRequires:  SDL2_mixer-devel
 BuildRequires:  xz-devel
@@ -57,7 +45,6 @@ Lightspark features:
 modern hardware. Designed from scratch after the official Flash
 documentation was released.
 
-
 %package mozilla-plugin
 Summary:       Mozilla compatible plugin for %{name}
 Requires:      mozilla-filesystem
@@ -71,36 +58,31 @@ install gnash ( without gnash-plugin ).
 
 %package chromium-plugin
 Summary:       Chromium compatible plugin for %{name}
-Requires:      chromium
 Requires:      %{name} = %{version}-%{release}
 
 %description chromium-plugin
 This is the Chromium compatible plugin for %{name}.
-
 
 %prep
 %if 0%{?git_snapshot}
 %setup -q -n %{name}-%{commit}
 %else
 %setup -q -n %{name}-%{version}
-%patch0 -p1 -b .gcc48
-%patch1 -p1 -b .ffmpeg45
 %endif
 
 
 %build
-%cmake3 \
+%cmake \
     -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
     -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 %{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1}
 
-%cmake3_build
+%cmake_build
 
 
 %install
-%cmake3_install
-%find_lang %{name}
+%cmake_install
 
 %if %{with tightspark}
 pushd %{buildroot}%{_datadir}/man/man1
@@ -114,7 +96,7 @@ rm %{buildroot}%{_libdir}/%{name}/lib%{name}.so
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 
-%files -f %{name}.lang
+%files
 %license COPYING COPYING.LESSER
 %doc ChangeLog
 %config(noreplace) %{_sysconfdir}/xdg/lightspark.conf
@@ -132,11 +114,15 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 %files chromium-plugin
 %license COPYING COPYING.LESSER
+%dir %{_libdir}/chromium-browser/
+%dir %{_libdir}/chromium-browser/PepperFlash/
 %{_libdir}/chromium-browser/PepperFlash/libpepflashplayer.so
 %{_libdir}/chromium-browser/PepperFlash/manifest.json
 
-
 %changelog
+* Tue Aug 23 2022 Leigh Scott <leigh123linux@gmail.com> - 0.8.6-1
+- Update to 0.8.6
+
 * Sun Aug 07 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 0.8.5-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild and ffmpeg
   5.1
