@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.6
-Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        2%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -120,6 +120,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_libdir}/chromium-browser/PepperFlash/manifest.json
 
 %changelog
+* Wed Mar 01 2023 Leigh Scott <leigh123linux@gmail.com> - 0.8.6-2
+- Rebuild for new ffmpeg
+
 * Tue Aug 23 2022 Leigh Scott <leigh123linux@gmail.com> - 0.8.6-1
 - Update to 0.8.6
 
