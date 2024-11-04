@@ -7,7 +7,7 @@
 
 Name:           lightspark
 Version:        0.8.7
-Release:        4%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Release:        5%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
 License:        LGPLv3+
 URL:            http://lightspark.github.io/
@@ -119,6 +119,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_libdir}/chromium-browser/PepperFlash/manifest.json
 
 %changelog
+* Mon Nov 04 2024 Mamoru TASAKA <mtasaka@fedoraproject.org> - 0.8.7-5
+- Rebuild for ffmpeg 7
+
 * Fri Aug 02 2024 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 0.8.7-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
 
