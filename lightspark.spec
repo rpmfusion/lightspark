@@ -16,6 +16,8 @@ Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.g
 %else
 Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
+Patch0:         https://github.com/lightspark/lightspark/commit/31b18a959ab5f1822e2bd86a9e8527c2f95e706f.patch
+Patch1:         https://github.com/lightspark/lightspark/commit/732f11b80142b53d7f843dae17021016551046d6.patch
 
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
@@ -64,9 +66,9 @@ This is the Chromium compatible plugin for %{name}.
 
 %prep
 %if 0%{?git_snapshot}
-%setup -q -n %{name}-%{commit}
+%autosetup -p1 -n %{name}-%{commit}
 %else
-%setup -q -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
 %endif
 
 

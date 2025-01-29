@@ -1,0 +1,18 @@
+From 732f11b80142b53d7f843dae17021016551046d6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ludger=20Kr=C3=A4mer?= <dbluelle@onlinehome.de>
+Date: Fri, 15 Nov 2024 17:47:45 +0100
+Subject: [PATCH] next try to fix github actions
+
+---
+ conf/CMakeASM-NASMLinkerInformation.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/conf/CMakeASM-NASMLinkerInformation.cmake b/conf/CMakeASM-NASMLinkerInformation.cmake
+index 05f89421a1..c1cdd30917 100644
+--- a/conf/CMakeASM-NASMLinkerInformation.cmake
++++ b/conf/CMakeASM-NASMLinkerInformation.cmake
+@@ -1,3 +1,3 @@
+ # support for the nasm assembler
+ 
+-INCLUDE(CMakeASMLinkerInformation)
++#INCLUDE(CMakeASMLinkerInformation)
