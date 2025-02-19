@@ -1,4 +1,5 @@
-%bcond_with tightspark
+%bcond_with    tightspark
+%bcond_without rtmp
 
 #global git_snapshot 1
 %global commit       7dd881170a1ed48596c19bac48cdcdd403f70841
@@ -28,7 +29,7 @@ BuildRequires:  gtkglext-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  libffi-devel
 BuildRequires:  libjpeg-turbo-devel
-BuildRequires:  librtmp-devel
+%{!?without_rtmp:BuildRequires:  librtmp-devel}
 BuildRequires:  nasm
 BuildRequires:  ncurses-devel
 BuildRequires:  SDL2-devel
@@ -77,6 +78,7 @@ This is the Chromium compatible plugin for %{name}.
     -DPLUGIN_DIRECTORY="%{_libdir}/mozilla/plugins" \
     -DPPAPI_PLUGIN_DIRECTORY="%{_libdir}/chromium-browser/PepperFlash/" \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+%{?without_rtmp:    -DENABLE_RTMP=0} \
 %{?with_tightspark:    -DCOMPILE_TIGHTSPARK=1}
 
 %cmake_build
