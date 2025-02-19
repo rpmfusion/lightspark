@@ -7,18 +7,16 @@
 %global date         20170422
 
 Name:           lightspark
-Version:        0.8.7
-Release:        6%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
+Version:        0.9.0
+Release:        1%{?git_snapshot:.%{date}git%{commit_short}}%{?dist}
 Summary:        An alternative Flash Player implementation
-License:        LGPLv3+
+License:        LGPL-3.0-or-later
 URL:            http://lightspark.github.io/
 %if 0%{?git_snapshot}
 Source0:        https://github.com/lightspark/lightspark/archive/%{commit}.tar.gz#/%{name}-%{version}-%{date}git%{commit_short}.tar.gz
 %else
 Source0:        https://github.com/lightspark/lightspark/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
-Patch0:         https://github.com/lightspark/lightspark/commit/31b18a959ab5f1822e2bd86a9e8527c2f95e706f.patch
-Patch1:         https://github.com/lightspark/lightspark/commit/732f11b80142b53d7f843dae17021016551046d6.patch
 
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
@@ -72,6 +70,9 @@ This is the Chromium compatible plugin for %{name}.
 %autosetup -p1 -n %{name}-%{version}
 %endif
 
+# Fix desktop file (https://github.com/lightspark/lightspark/issues/1155)
+sed -i -e 's/Multimedia;//' media/lightspark.desktop
+
 
 %build
 %cmake \
@@ -123,6 +124,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_libdir}/chromium-browser/PepperFlash/manifest.json
 
 %changelog
+* Wed Feb 19 2025 Xavier Bachelot <xavier@bachelot.org> - 0.9.0-1
+- Update to 0.9.0
+- Allow to build without librtmp
+- Convert License to SPDX
+
 * Tue Jan 28 2025 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 0.8.7-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
 
